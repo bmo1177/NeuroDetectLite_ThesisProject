@@ -1,6 +1,6 @@
 package com.neurodetect
 
-expect class OnnxClassifier(weightsBytes: ByteArray? = null) {
+expect class OnnxClassifier(weightsBytes: ByteArray?) {
 
     fun load(modelBytes: ByteArray)
 

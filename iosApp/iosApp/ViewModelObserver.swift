@@ -2,7 +2,7 @@ import SwiftUI
 import shared
 
 class ViewModelObserver: ObservableObject {
-    let onnxClassifier = OnnxClassifier()
+    let onnxClassifier = OnnxClassifier(weightsBytes: nil)
     lazy var viewModel: SharedViewModel = {
         SharedViewModel(classifier: onnxClassifier)
     }()
