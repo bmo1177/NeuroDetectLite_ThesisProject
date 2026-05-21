@@ -1,0 +1,21 @@
+# Xcode
+build/
+*.xcworkspace
+xcuserdata/
+DerivedData/
+
+# CocoaPods
+Pods/
+
+# Gradle
+.gradle/
+build/
+!shared/build/cocoapods/publish/release/*.podspec
+local.properties
+
+# macOS
+.DS_Store
+
+# IDE
+*.iml
+.idea/

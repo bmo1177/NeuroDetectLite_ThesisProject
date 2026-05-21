@@ -1,5 +1,6 @@
 target 'iosApp' do
   use_frameworks!
   platform :ios, '16.0'
+  pod 'shared', :path => '../shared/build/cocoapods/publish/release'
   pod 'onnxruntime-mobile-objc', '~> 1.17.1'
 end

@@ -1,0 +1,53 @@
+workflows:
+  ios-build:
+    name: NeuroDetectLite iOS Build
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      groups:
+        - app_store_credentials
+      vars:
+        XCODE_PROJECT: "iosApp/iosApp.xcodeproj"
+        XCODE_SCHEME: "iosApp"
+        BUNDLE_ID: "com.neurodetect.ios"
+      xcode: 16.1
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+    scripts:
+      - name: Build shared KMP framework for iOS
+        script: |
+          ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
+      - name: Generate CocoaPods podspec for shared framework
+        script: |
+          ./gradlew :shared:podSpec
+      - name: Install CocoaPods dependencies
+        script: |
+          cd iosApp
+          pod install
+      - name: Build iOS app for simulator
+        script: |
+          cd iosApp
+          xcodebuild -workspace iosApp.xcworkspace \
+            -scheme "$XCODE_SCHEME" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+    artifacts:
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+    publishing:
+      email:
+        recipients:
+          - bmo_17@proton.me
+        notify:
+          success: true
+          failure: true
