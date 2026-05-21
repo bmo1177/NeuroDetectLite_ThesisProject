@@ -7,7 +7,6 @@ workflows:
       groups:
         - app_store_credentials
       vars:
-        XCODE_PROJECT: "iosApp/iosApp.xcodeproj"
         XCODE_SCHEME: "iosApp"
         BUNDLE_ID: "com.neurodetect.ios"
       xcode: 16.1
@@ -20,21 +19,24 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Install CocoaPods dependencies (includes onnxruntime)
+      - name: Install CocoaPods (onnxruntime)
         script: |
           cd iosApp
           pod install
-      - name: Build shared KMP framework for iOS
+      - name: Build shared KMP framework (cinterop finds onnxruntime via Pods/)
         script: |
           ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
-      - name: Build iOS app for simulator
+      - name: Build iOS app
         script: |
           cd iosApp
+          FRAMEWORK_PATH="$PWD/../shared/build/bin/iosSimulatorArm64/debugFramework"
           xcodebuild -workspace iosApp.xcworkspace \
             -scheme "$XCODE_SCHEME" \
             -configuration Debug \
             -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+            FRAMEWORK_SEARCH_PATHS="$FRAMEWORK_PATH" \
+            OTHER_LDFLAGS="-framework shared" \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
