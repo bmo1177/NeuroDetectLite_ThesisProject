@@ -7,6 +7,7 @@ import platform.Foundation.NSData
 import platform.Foundation.create
 
 actual class OnnxClassifier actual constructor(weightsBytes: ByteArray?) {
+    constructor() : this(null)
 
     private var session: Any? = null
 

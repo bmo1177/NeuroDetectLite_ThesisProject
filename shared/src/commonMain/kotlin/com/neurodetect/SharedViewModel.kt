@@ -21,8 +21,9 @@ sealed class UiState {
 
 class SharedViewModel(
     private val classifier: OnnxClassifier,
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    private val scope: CoroutineScope
 ) {
+    constructor(classifier: OnnxClassifier) : this(classifier, CoroutineScope(Dispatchers.Default))
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
