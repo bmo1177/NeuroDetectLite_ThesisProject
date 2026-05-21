@@ -9,14 +9,12 @@ class ViewModelObserver: ObservableObject {
 
     @Published var uiState: UiState? = nil
 
-    private var job: Ktor_ioCloseable? = nil
-
     init() {
         observeState()
     }
 
     func loadModel(modelBytes: KotlinByteArray) {
-        viewModel.loadModel(modelBytes: modelBytes)
+        viewModel.loadModel(modelBytes: modelBytes, modelName: "")
     }
 
     func analyze(totalScore: Int32, recallScore: Int32, educationYears: Int32) {
@@ -30,7 +28,7 @@ class ViewModelObserver: ObservableObject {
     }
 
     private func observeState() {
-        job = viewModel.uiState.watch { [weak self] state in
+        viewModel.observeState { [weak self] state in
             DispatchQueue.main.async {
                 self?.uiState = state
             }
@@ -38,6 +36,6 @@ class ViewModelObserver: ObservableObject {
     }
 
     deinit {
-        job?.close()
+        viewModel.stopObserving()
     }
 }

@@ -2,6 +2,7 @@ package com.neurodetect
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,6 +31,20 @@ class SharedViewModel(
 
     private val _currentModelName = MutableStateFlow("")
     val currentModelName: StateFlow<String> = _currentModelName.asStateFlow()
+
+    private var observationJob: Job? = null
+
+    fun observeState(callback: (UiState) -> Unit) {
+        observationJob?.cancel()
+        observationJob = scope.launch {
+            _uiState.collect { callback(it) }
+        }
+    }
+
+    fun stopObserving() {
+        observationJob?.cancel()
+        observationJob = null
+    }
 
     private var customInputTensor: FloatArray? = null
 
