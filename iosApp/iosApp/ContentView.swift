@@ -184,6 +184,7 @@ struct GateCard: View {
 
 struct PredictionCard: View {
     let prediction: PredictionResult
+    private let classNames = ["Cognitively Normal", "MCI", "Alzheimer's Disease"]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -195,7 +196,7 @@ struct PredictionCard: View {
                     Text("Diagnosis")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    Text(PredictionResult.companion.CLASS_NAMES[Int(prediction.predictedClass)])
+                    Text(classNames[Int(prediction.predictedClass)])
                         .font(.title3)
                         .fontWeight(.bold)
                 }
@@ -217,8 +218,8 @@ struct PredictionCard: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
 
-            ForEach(Array(PredictionResult.companion.CLASS_NAMES.enumerated()), id: \.offset) { i, name in
-                let prob = prediction.probabilities[i]
+            ForEach(Array(classNames.enumerated()), id: \.offset) { i, name in
+                let prob = prediction.probabilities.get(index: Int32(i))
                 HStack {
                     Text(name)
                         .frame(width: 140, alignment: .leading)
