@@ -20,16 +20,13 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Build shared KMP framework for iOS
-        script: |
-          ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
-      - name: Generate CocoaPods podspec for shared framework
-        script: |
-          ./gradlew :shared:podSpec
-      - name: Install CocoaPods dependencies
+      - name: Install CocoaPods dependencies (includes onnxruntime)
         script: |
           cd iosApp
           pod install
+      - name: Build shared KMP framework for iOS
+        script: |
+          ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
       - name: Build iOS app for simulator
         script: |
           cd iosApp

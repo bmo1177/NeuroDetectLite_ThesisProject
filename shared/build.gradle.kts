@@ -30,7 +30,6 @@ kotlin {
         ios.deploymentTarget = "16.0"
         pod("onnxruntime-mobile-objc") {
             version = "~> 1.17.1"
-            moduleName = "onnxruntime"
         }
     }
 
