@@ -35,6 +35,8 @@ workflows:
             -configuration Debug \
             -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
+            ARCHS=arm64 \
+            ONLY_ACTIVE_ARCH=YES \
             FRAMEWORK_SEARCH_PATHS="$FRAMEWORK_PATH" \
             OTHER_LDFLAGS="-framework shared" \
             CODE_SIGN_IDENTITY="" \
