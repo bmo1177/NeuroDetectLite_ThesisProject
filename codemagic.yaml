@@ -34,7 +34,7 @@ workflows:
             -scheme "$XCODE_SCHEME" \
             -configuration Debug \
             -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+            -destination 'generic/platform=iOS Simulator' \
             FRAMEWORK_SEARCH_PATHS="$FRAMEWORK_PATH" \
             OTHER_LDFLAGS="-framework shared" \
             CODE_SIGN_IDENTITY="" \
